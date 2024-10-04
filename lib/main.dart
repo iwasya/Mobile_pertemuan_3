@@ -5,22 +5,59 @@ import 'package:google_fonts/google_fonts.dart'; // Import Google Fonts
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   static const String _title = 'HalloDock';
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: _title,
       debugShowCheckedModeBanner: false,
-      home: const RegisterPage(),
+      home: RegisterPage(),
     );
   }
 }
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _usernameRegister = TextEditingController();
+  final TextEditingController _emailRegister = TextEditingController();
+  final TextEditingController _passwordRegister = TextEditingController();
+  final TextEditingController _confirmPasswordRegister =
+      TextEditingController();
+
+  void _view() {
+    String username = _usernameRegister.text;
+    String email = _emailRegister.text;
+    String password = _passwordRegister.text;
+    String confirmPassword = _confirmPasswordRegister.text;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Register'),
+          content: Text(
+              'Username: $username\nEmail: $email\nPassword: $password\nConfirm Password: $confirmPassword'),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +90,7 @@ class RegisterPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
+                      controller: _usernameRegister,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'User Name',
@@ -63,6 +101,7 @@ class RegisterPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     child: TextField(
+                      controller: _emailRegister,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
@@ -73,6 +112,7 @@ class RegisterPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextField(
+                      controller: _passwordRegister,
                       obscureText: true,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -84,6 +124,7 @@ class RegisterPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                     child: TextField(
+                      controller: _confirmPasswordRegister,
                       obscureText: true,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -92,35 +133,32 @@ class RegisterPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Menambahkan jarak antara "Confirm Password" dan tombol "Register"
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 20), // Space before Register button
                   Container(
                     height: 50,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       child: const Text('Register'),
                       onPressed: () {
-                        // Aksi yang dilakukan saat tombol register ditekan
+                        _view();
                       },
                     ),
                   ),
-                  const SizedBox(
-                      height: 20), // Menambahkan jarak sebelum teks "Or"
-                  Center(
-                    child: const Text('Or', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 20), // Space before "Or"
+                  const Center(
+                    child: Text('Or', style: TextStyle(fontSize: 16)),
                   ),
-                  const SizedBox(
-                      height: 20), // Menambahkan jarak setelah teks "Or"
+                  const SizedBox(height: 20), // Space after "Or"
                 ],
               ),
             ),
-            // Menambahkan tombol "Sign In with Google"
+            // Sign In with Google button
             Container(
               height: 50,
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Aksi yang dilakukan saat tombol "Sign In with Google" ditekan
+                  // Action when "Sign In with Google" button is pressed
                 },
                 label: const Text(
                   'Sign In with Google',
@@ -129,24 +167,29 @@ class RegisterPage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(),
               ),
             ),
+            // Row for Login redirect
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text('Already have an account?'),
-                SizedBox(width: 10), // Menambahkan jarak antara teks dan tombol
+                const SizedBox(width: 10), // Space between text and button
                 TextButton(
                   child: const Text(
                     'Login',
                     style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
                   },
                 ),
               ],
             ),
-            SizedBox(height: 20), // Menambahkan jarak di bawah row
+            const SizedBox(height: 20), // Space below the Row
           ],
         ),
       ),
